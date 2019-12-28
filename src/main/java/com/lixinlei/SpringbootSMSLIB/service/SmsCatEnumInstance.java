@@ -38,7 +38,6 @@ public enum SmsCatEnumInstance {
         }
 
         public synchronized SmsResult send(String port, String receiver, String content) {
-
             try {
                 start(port);
             } catch (GatewayException e) {
@@ -57,7 +56,7 @@ public enum SmsCatEnumInstance {
             return MessageWrapper.doWrap(msg);
         }
 
-        public void stop(Exception e) {
+        protected void stop(Exception e) {
             try {
                 System.out.println(e.getMessage());
             } catch (Exception ex) {
@@ -69,7 +68,7 @@ public enum SmsCatEnumInstance {
 
     protected abstract void start(String port) throws InterruptedException, SMSLibException, IOException;
     public abstract SmsResult send(String port, String receiver, String content);
-    public abstract void stop(Exception e);
+    protected abstract void stop(Exception e);
 
     public static SmsCatEnumInstance getInstance() {
         return INSTANCE;
