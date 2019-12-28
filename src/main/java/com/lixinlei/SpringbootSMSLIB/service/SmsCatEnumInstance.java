@@ -56,8 +56,13 @@ public enum SmsCatEnumInstance {
             return MessageWrapper.doWrap(msg);
         }
 
-        protected void stop(Exception e) {
+        public void stop(Exception e) {
             try {
+                Service.getInstance().stopService();
+                SerialModemGateway gateway = (SerialModemGateway) Service.getInstance().getGateway("modem.com3");
+                gateway.stopGateway();
+                Service.getInstance().removeGateway(gateway);
+                started = false;
                 System.out.println(e.getMessage());
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -68,7 +73,7 @@ public enum SmsCatEnumInstance {
 
     protected abstract void start(String port) throws InterruptedException, SMSLibException, IOException;
     public abstract SmsResult send(String port, String receiver, String content);
-    protected abstract void stop(Exception e);
+    public abstract void stop(Exception e);
 
     public static SmsCatEnumInstance getInstance() {
         return INSTANCE;
